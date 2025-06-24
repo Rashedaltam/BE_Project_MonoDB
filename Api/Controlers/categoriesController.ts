@@ -5,9 +5,14 @@ import Categories from "../Models/categoriesModel";
 export const getAllCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Categories.find().populate("books");
-    res.status(200).json({ status: "Success", categories });
+    res.status(200).json({ 
+      status: "Success", 
+      message: "Data are fetched Successfully.",
+      categories });
   } catch (error) {
-    res.status(500).json({ status: "Failed", error });
+    res.status(500).json({ 
+      status: "Failed", 
+      error });
   }
 };
 
@@ -17,11 +22,17 @@ export const getCategoryById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const category = await Categories.findById(id).populate("books");
     if (!category) {
-      return res.status(404).json({ status: "Failed", message: "Category not found" });
+       res.status(404).json({ 
+        status: "Failed", 
+        message: "Category not found" });
     }
-    res.status(200).json({ status: "Success", category });
+    res.status(200).json({ 
+      status: "Success", 
+      category });
   } catch (error) {
-    res.status(500).json({ status: "Failed", error });
+    res.status(500).json({ 
+      status: "Failed", 
+      error });
   }
 };
 
@@ -30,9 +41,13 @@ export const categoryCreate = async (req: Request, res: Response) => {
   try {
     const { name, books } = req.body;
     const category = await Categories.create({ name, books });
-    res.status(201).json({ status: "Success", category });
+    res.status(201).json({ 
+      status: "Success", 
+      category });
   } catch (error) {
-    res.status(500).json({ status: "Failed", error });
+    res.status(500).json({ 
+      status: "Failed", 
+      error });
   }
 };
 
@@ -47,11 +62,17 @@ export const categoryUpdate = async (req: Request, res: Response) => {
       { new: true }
     ).populate("books");
     if (!updatedCategory) {
-      return res.status(404).json({ status: "Failed", message: "Category not found" });
+       res.status(404).json({ 
+        status: "Failed", 
+        message: "Category not found" });
     }
-    res.status(200).json({ status: "Success", category: updatedCategory });
+    res.status(200).json({ 
+      status: "Success", 
+      category: updatedCategory });
   } catch (error) {
-    res.status(500).json({ status: "Failed", error });
+    res.status(500).json({ 
+      status: "Failed", 
+      error });
   }
 };
 
@@ -61,10 +82,14 @@ export const categoryDelete = async (req: Request, res: Response) => {
     const { id } = req.params;
     const deletedCategory = await Categories.findByIdAndDelete(id);
     if (!deletedCategory) {
-      return res.status(404).json({ status: "Failed", message: "Category not found" });
+       res.status(404).json({ 
+        status: "Failed", 
+        message: "Category not found" });
     }
     res.status(200).json({ status: "Success", category: deletedCategory });
   } catch (error) {
-    res.status(500).json({ status: "Failed", error });
+    res.status(500).json({ 
+      status: "Failed", 
+      error: `coudnt delete the sellected category: ${error}` });
   }
 };

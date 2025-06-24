@@ -10,7 +10,7 @@ export const getAllAuthors = async (req: Request, res: Response) => {
     res.status(200).json({
       status: "Success",
       message: "Data are fetched Successfully.",
-      authors, // i think somthing is wrong or missing but its working in postman
+      authors,
     });
   } catch (error) {
     res.status(404).json({
@@ -28,7 +28,7 @@ export const getAuthorById = async (req: Request, res: Response) => {
     const author = await Author.findById(id).populate("books"); // with populate
 
     if (!author) {
-      return res.status(404).json({
+      res.status(404).json({
         status: "Failed",
         message: "Author not found",
       });
@@ -78,12 +78,12 @@ export const authorUpdate = async (req: Request, res: Response) => {
 
     const updateAuthor = await Author.findByIdAndUpdate(
       id,
-      {name, country, books},
-      {new : true},
-    ).populate("books") /// why ?
-    
+      { name, country, books },
+      { new: true }
+    ).populate("books"); /// why ?
+
     if (!updateAuthor) {
-      return res.status(404).json({
+      res.status(404).json({
         status: "Failed",
         message: "Author not found",
       });
@@ -93,7 +93,7 @@ export const authorUpdate = async (req: Request, res: Response) => {
       message: "Author updated successfully.",
       author: updateAuthor,
     });
-
+  
   } catch (error) {
     res.status(404).json({
       status: "Failed",
@@ -108,7 +108,7 @@ export const authorDelete = async (req: Request, res: Response) => {
     const { id } = req.params;
     const deletedAuthor = await Author.findByIdAndDelete(id);
     if (!deletedAuthor) {
-      return res.status(404).json({
+      res.status(404).json({
         status: "Failed",
         message: "Author not found",
       });

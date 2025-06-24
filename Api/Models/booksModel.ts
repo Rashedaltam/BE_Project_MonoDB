@@ -7,7 +7,8 @@ const booksSchema = new Schema(
   {
     title: { type: String, required: true }, 
     author: {type: mongoose.Schema.Types.ObjectId, ref: "Author", required: true }, //// Author (ObjectId ref to Author, required)
-    categories: [{type: mongoose.Schema.Types.ObjectId, ref: "Category"}] //// Categories (array of ObjectId ref to Category) 
+    categories: [{type: mongoose.Schema.Types.ObjectId, ref: "Category"}], //// Categories (array of ObjectId ref to Category) 
+     image: {type: String},
   },
   { timestamps: true }
 );

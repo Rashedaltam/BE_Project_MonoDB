@@ -9,6 +9,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
       .populate("categories");
     res.status(200).json({
       status: "Success",
+      message: "Data are fetched Successfully.",
       books,
     });
   } catch (error) {
@@ -24,7 +25,7 @@ export const getBookById = async (req: Request, res: Response) => {
       .populate("author")
       .populate("categories");
     if (!book) {
-      return res.status(404).json({ status: "Failed", message: "Book not found" });
+       res.status(404).json({ status: "Failed", message: "Book not found" });
     }
     res.status(200).json({ status: "Success", book });
   } catch (error) {
@@ -35,8 +36,12 @@ export const getBookById = async (req: Request, res: Response) => {
 // POST /books: create book
 export const bookCreate = async (req: Request, res: Response) => {
   try {
-    const { title, author, categories } = req.body;
-    const book = await Books.create({ title, author, categories });
+    const { title, author, categories, image } = req.body;
+    let imagePath;
+    if (req.file) {
+      imagePath = req.file.path
+    }
+    const book = await Books.create({ title, author, categories, image:imagePath});
     res.status(201).json({ status: "Success", book });
   } catch (error) {
     res.status(500).json({ status: "Failed", error });
@@ -52,11 +57,9 @@ export const bookUpdate = async (req: Request, res: Response) => {
       id,
       { title, author, categories },
       { new: true }
-    )
-      .populate("author")
-      .populate("categories");
+    ).populate("author").populate("categories");
     if (!updatedBook) {
-      return res.status(404).json({ status: "Failed", message: "Book not found" });
+       res.status(404).json({ status: "Failed", message: "Book not found" });
     }
     res.status(200).json({ status: "Success", book: updatedBook });
   } catch (error) {
@@ -70,10 +73,16 @@ export const bookDelete = async (req: Request, res: Response) => {
     const { id } = req.params;
     const deletedBook = await Books.findByIdAndDelete(id);
     if (!deletedBook) {
-      return res.status(404).json({ status: "Failed", message: "Book not found" });
+       res.status(404).json({ 
+        status: "Failed",
+        message: "Book not found" });
     }
-    res.status(200).json({ status: "Success", book: deletedBook });
+    res.status(200).json({ 
+      status: "Success", 
+      book: deletedBook });
   } catch (error) {
-    res.status(500).json({ status: "Failed", error });
+    res.status(500).json({ 
+      status: "Failed", 
+      error: `coudnt delete the sellected author: ${error}` });
   }
 };
